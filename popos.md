@@ -10,7 +10,9 @@ Pop!_OS 20.04 LTSのインストーラをダウンロードしてUSBメモリに
 
 ## Capslock を Ctrl に
 
-`/etc/default/keyboard` に以下を追記して再起動。
+~~`/etc/default/keyboard` に以下を追記して再起動。~~
+
+xkeysnail でやるので下記は不要。
 
 ```bash
 XKBOPTIONS="ctrl:nocaps"
@@ -216,7 +218,7 @@ X230t でやったときは DISPLAY=:1 だった。(:0ではなかった)
 
 ## vscode インストール
 
-`Pop!_Shop` でインストール可能だった。
+`Pop!_Shop` でインストール可能だった。Flatpak版はローカルファイルの読み書きに制限があるようでコンソールがshだったりローカルのxclipが見つからずにPaste Image拡張が使えなかったりで不便だったので、deb版を使うことに。
 
 ## firefox で M-v などしたときにメニューにフォーカスがあたってしまう問題
 
@@ -325,3 +327,15 @@ fc-cache -fv
 - [x] トラポキャップ変えてみる @done(2021-02-07 15:04)
 - [ ] テーマ
 - [ ] 半透明
+
+## T495s における予期せぬフリーズ
+
+T495sでLinuxを使っていると、時折なんの前触れもなく突然のフリーズが発生する。キーもマウスも一切効かなくなる。唯一Fn+Spaceでキーボードのバックライトをつけたり消したりできる程度。`sudo radeontop`でGPUの状態表示をさせると10秒ほどで必ず再現できる。のでおそらくGPUの問題に間違いない。これは今回のPop!_OSに限った話ではなく、過去にもUbuntu20.04, Ubuntu20.10, Manjaro, Regolithでも同様だった。
+
+以下で緩和された。完全に無くなったわけではないが、フリーズの頻度がだいぶ低くなった。
+
+```shell-session
+$ sudo su -
+# echo "manual" > /sys/class/drm/card0/device/power_dpm_force_performance_level
+```
+
